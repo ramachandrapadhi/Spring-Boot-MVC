@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Mess manage</title>
+	<link rel="shortcut icon" href="img/ms.png" type="image/x-icon">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+		crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		crossorigin="anonymous"></script>
+		
+		  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" th:href="@{/}">Ramana Mess</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+				aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon" />
+			</button>
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="navbar-nav me-auto mb-2 mb-md-0">
+					<li class="nav-item">
+						<a class="nav-link active" aria-current="page" th:href="@{/}">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href="@{/getAll}">All Data</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" th:href=" @{/mspend/mSeteled}">M-Seteled</a>
+					</li>
+				</ul>
+				<form class="d-flex">
+					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container pt-5">
+		<div class="row  pt-5" th:if="${toast}" id="alert">
+			<div class="col">
+				<div class="alert alert-success alert-dismissible">
+					<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+					<strong th:text="${message}"></strong>
+				</div>
+			</div>
+		</div>
+
+		<div class="row pt-2 pb-2 mt-5 bg-info">
+			<div class="col-11">
+				<h4 class="">Monthly Setelment(Monthly Spend Ammount)</h4>
+			</div>
+			<div class="col-1">
+				<button class="btn btn-primary pull-right" type="button" data-bs-toggle="modal"
+					data-bs-target="#staticBackdrop" title="Add Monthly Cost">
+					<i class="fa fa-plus"></i>
+				</button>
+			</div>
+		</div>
+
+		<!--<div class="row mt-5">
+			<form th:action="@{/searchData}" method="post" autocomplete="off">
+				<div class="row">
+					<div class="col">
+						<input type="date" class="form-control" placeholder="yyyy-mm-dd" name="fromDate" id="fromDate">
+					</div>
+					<div class="col">
+						<input type="date" class="form-control" placeholder="yyyy-mm-dd" name="toDate" id="toDate">
+					</div>
+					<div class="col">
+						<select class="form-select form-control" id="name" name="name">
+							<option value="">--Select Name--</option>
+							<option value="amit">AMIT</option>
+							<option value="ram">RAM</option>
+							<option value="sangram">SANGRAM</option>
+						</select>
+					</div>
+					<div class="col-md-2">
+						
+						<button class="btn btn-primary">Submit</button>
+					</div>
+				</div>
+			</form>
+		</div>-->
+
+		<div class="row mt-5 mb-5">
+			<div class="accordion" id="accordionExample">
+				<div class="accordion-item" th:each="ob:${mSpendList}">
+					<h2 class="accordion-header" th:id="'headingOne'+${ob.id}">
+						<button class="accordion-button" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#collapseOne'+${ob.id}" th:aria-expanded="false"
+							th:aria-controls="'collapseOne'+${ob.id}">
+							<strong>[[${obStat.index +1}]] - [[${ob.creatAt}]]</strong>
+						</button>
+					</h2>
+					<div th:id="'collapseOne'+${ob.id}" class="accordion-collapse collapse"
+						th:aria-labelledby="'headingOne'+${ob.id}" data-bs-parent="#accordionExample">
+						<div class="accordion-body" style="background-color: #E8F8F5">
+							<table class="table table-borderless table-hover">
+								<tr>
+									<th>Room Rent </th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.roomRent}]]</th>
+								</tr>
+								<tr>
+									<th>Water Bill</th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.waterBill}]]</th>
+								</tr>
+								<tr>
+									<th>Electricity Bill </th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.elecBill}]]</th>
+								</tr>
+								<tr>
+									<th>Mess Bill</th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.messBill}]]</th>
+								</tr>
+								<tr>
+									<th>Per Head Cost </th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.perHead}]]</th>
+								</tr>
+								<tr>
+									<th>Setelement Date</th>
+									<th>:&nbsp;&nbsp;&nbsp;[[${ob.creatAt}]]</th>
+								</tr>
+							</table>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--Form Model -->
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header bg-info text-white">
+					<h4 class="modal-title text-center" id="staticBackdropLabel">Add Monthly Spend Cost</h4>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<form th:action="@{/mspend/addmspend}" method="post" autocomplete="off" id="modelForm">
+
+						<div class="mb-3">
+							<label for="roomRent" class="col-form-label">Room Rent:</label>
+							<input type="text" class="form-control" id="roomRent" name="roomRent" required>
+						 	<div class="invalid-feedback">Please fill out this field.</div>
+						</div>
+
+						<div class="mb-3">
+							<label for="waterBill" class="col-form-label">Water Bill:</label>
+							<input type="text" class="form-control" id="waterBill" name="waterBill">
+						</div>
+
+						<div class="mb-3">
+							<label for="elecBill" class="col-form-label">Electricity Bill :</label>
+							<input type="text" class="form-control" id="elecBill" name="elecBill">
+						</div>
+
+						<div class="mb-3">
+							<label for="messBill" class="col-form-label">Mess Bill:</label>
+							<input type="text" class="form-control" id="messBill" name="messBill">
+						</div>
+						<div class="mb-3 mt-3">
+							<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+							<button type="submit" class="btn btn-primary pull-right" onclick="submit()">Submit</button>
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+
+
+
+	<script>
+
+		async function submit() {
+			let roomRent = document.getElementById("roomRent").value;
+			let waterBill = document.getElementById("waterBill").value;
+			let elecBill = document.getElementById("elecBill").value;
+			let messBill = document.getElementById("messBill").value;
+			document.getElementById("modelForm").reset();
+
+			modelForm
+
+			let param = {
+				roomRent: roomRent,
+				waterBill: waterBill,
+				elecBill: elecBill,
+				messBill: messBill
+			}
+
+
+			console.log(JSON.stringify(param));
+
+
+
+		}
+
+		function onlyNumbervalidation(event) {
+			return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57;
+		}
+
+
+	</script>
+</body>
+
+
+</html>
