@@ -26,6 +26,7 @@ public class MController {
 	
 	@GetMapping(path = "/")
 	public String index(Model model) {
+		System.out.println("================MController.index()===========");
 		return "welcome";
 	}
 	
